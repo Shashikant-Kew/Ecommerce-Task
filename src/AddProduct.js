@@ -11,14 +11,25 @@ class AddProduct extends React.Component {
       price: ''
     }
 
-    if(props.product){
-      this.state = props.product
-    } else {
-      this.state = this.initialState;
+    this.state = {
+      id: '',
+      name: '',
+      description:'',
+      price: ''
     }
+
+
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount(){
+    if(this.props.product){
+      this.setState({...this.props.product})
+    } else {
+       this.setState({...this.initialState})
+    }
   }
 
   handleChange(event) {
@@ -49,9 +60,9 @@ class AddProduct extends React.Component {
       <div>
         {pageTitle}
         <Row>
-          <Col sm={6}>
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Group controlId="name">
+          <Col sm={12}>
+            <Form>
+              <Form.Group controlId="fname">
                 <Form.Label>Product Name</Form.Label>
                 <Form.Control
                   type="text"
@@ -79,8 +90,8 @@ class AddProduct extends React.Component {
                   placeholder="Price" />
               </Form.Group>
               <Form.Group>
-                <Form.Control type="hidden" name="id" value={this.state.id} />
-                <Button variant="success" type="submit">Save</Button>
+                <Form.Control type="hidden" name="id" value={this.state} />
+                <Button variant="success" type="submit" onClick={this.handleSubmit}>Save</Button>
               </Form.Group>
             </Form>
           </Col>

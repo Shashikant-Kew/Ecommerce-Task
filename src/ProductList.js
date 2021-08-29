@@ -28,16 +28,15 @@ class ProductList extends React.Component {
       )
   }
 
-  deleteProduct(productId) {
+  deleteProduct(id) {
     const { products } = this.state;
 
-    const apiUrl = 'http://localhost:3000/products';
-    const formData = new FormData();
-    formData.append('id', productId);
+    const apiUrl = `http://localhost:3000/products/${id}`;
+
 
     const options = {
       method: 'DELETE',
-      body: formData
+
     }
 
     fetch(apiUrl, options)
@@ -46,7 +45,7 @@ class ProductList extends React.Component {
         (result) => {
           this.setState({
             response: result,
-            products: products.filter(product => product.id !== productId)
+            products: products.filter(product => product.id !== id)
           });
         },
         (error) => {

@@ -12,7 +12,8 @@ class App extends Component {
       error: null,
       response: {},
       product: {},
-      isEditProduct: false
+      products:[],
+      isEditProduct: false,
     }
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
@@ -21,23 +22,49 @@ class App extends Component {
     this.setState({ isAddProduct: true });
   }
 
+  componentDidMount() {
+    const apiUrl = 'http://localhost:3000/products';
+
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            products: result
+          });
+        },
+        (error) => {
+          this.setState({ error });
+        }
+      )
+  }
+
+
   onFormSubmit(data) {
+    const lastidx =  this.state.products.length -1;
+    if(!data.id)
+    {
+      data.id = this.state.products[lastidx].id + 1;
+    }
+    let body = JSON.stringify(data)
     let apiUrl;
+    let headers = new Headers();
+    headers.append('Content-Type','application/json');
+    let options = {
+      body,
+      headers
+    };
 
     if(this.state.isEditProduct){
-      apiUrl = 'http://localhost:3000/products';
+      apiUrl = `http://localhost:3000/products/${data.id}`;
+      options.method = 'PUT';
     } else {
-      apiUrl = 'http://localhost:3000/products';
+      apiUrl = `http://localhost:3000/products` ;
+      options.method = 'POST'
     }
 
-    const myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(data),
-      myHeaders
-    };
+    
+    
 
     fetch(apiUrl, options)
       .then(res => res.json())
@@ -54,15 +81,12 @@ class App extends Component {
     )
   }
 
-  editProduct = productId => {
+  editProduct = id => {
 
-    const apiUrl = 'http://localhost:3000/products';
-    const formData = new FormData();
-    formData.append('id', productId);
+    const apiUrl = `http://localhost:3000/products/${id}`;
 
     const options = {
-      method: 'PATCH',
-      body: formData
+      method: 'GET',
     }
 
     fetch(apiUrl, options)
@@ -92,7 +116,9 @@ class App extends Component {
       <div className="App">
         <Container>
           <h1 style={{textAlign:'center'}}>E-Commerce</h1>
+          <br />
           {!this.state.isAddProduct && <Button variant="primary" onClick={() => this.onCreate()}>Add Product</Button>}
+          <br /><br />
           {this.state.response.status === 'success' && <div><br /><Alert variant="info">{this.state.response.message}</Alert></div>}
           {!this.state.isAddProduct && <ProductList editProduct={this.editProduct}/>}
           { productForm }
