@@ -115,7 +115,7 @@ class App extends Component {
     return (
       <div className="App">
         <Container>
-          <h1 style={{textAlign:'center'}}>E-Commerce</h1>
+          <h1 style={{textAlign:'center'}}>Shop-Bridge</h1>
           <br />
           {!this.state.isAddProduct && <Button variant="primary" onClick={() => this.onCreate()}>Add Product</Button>}
           <br /><br />

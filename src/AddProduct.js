@@ -69,6 +69,7 @@ class AddProduct extends React.Component {
                   name="name"
                   value={this.state.name}
                   onChange={this.handleChange}
+                  required
                   placeholder="Product Name"/>
               </Form.Group>
               <Form.Group controlId="description">
@@ -83,10 +84,11 @@ class AddProduct extends React.Component {
               <Form.Group controlId="price">
                 <Form.Label>Price</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   name="price"
                   value={this.state.price}
                   onChange={this.handleChange}
+                  required
                   placeholder="Price" />
               </Form.Group>
               <Form.Group>
